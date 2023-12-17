@@ -50,5 +50,4 @@ outputHeader = False
 if (headerA != None):
   outputHeader = True
 
-
-pdResult.to_csv(sys.stdout, sep=sepA, header=False)
+pdResult.to_csv(sys.stdout, sep=sepA, header=outputHeader, index=False)
