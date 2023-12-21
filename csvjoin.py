@@ -5,7 +5,7 @@ import argparse
 parser = argparse.ArgumentParser(description="Add columns to dataframe A using B's information for annotation or other purpose")
 parser.add_argument("-A", help="csv file A", dest="A", required=True)
 parser.add_argument("-B", help="csv file B", dest="B", required=True)
-parser.add_argument("-B-col", help="add this column in B to A", dest="colB", required=True)
+parser.add_argument("-B-col", help="add this column in B to A. Use comma to specify multiple columns", dest="colB", required=True)
 #parser.add_argument("-o", help="output file", dest="output", required=False)
 parser.add_argument("-A-sep", help="column separator for A", dest="sepA", required=False, default=",")
 parser.add_argument("-B-sep", help="column separator for B", dest="sepB", required=False, default=",")
@@ -26,12 +26,12 @@ if (args.headerB):
 
 keyA = args.keyA 
 keyB = args.keyB
-colB = args.colB
+colB = args.colB.split(",")
 if (headerA == None):
   keyA = int(keyA)
 if (headerB == None):
   keyB = int(keyB)
-  colB = int(colB)
+  colB = [int(c) for c in colB]
 
 sepA = args.sepA
 sepB = args.sepB
@@ -42,7 +42,7 @@ if (sepB == "\\t"):
 
 # Core part
 pdA = pd.read_csv(args.A, sep=sepA, header=headerA)
-pdB = pd.read_csv(args.B, sep=sepB, header=headerB)[[keyB, colB]]
+pdB = pd.read_csv(args.B, sep=sepB, header=headerB)[[keyB] + colB]
 
 pdResult = pdA.merge(pdB, left_on=keyA, right_on = keyB)
 
